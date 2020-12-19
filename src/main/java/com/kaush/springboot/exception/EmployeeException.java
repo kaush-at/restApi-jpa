@@ -10,6 +10,10 @@ public class EmployeeException extends Exception {
 	public EmployeeException(String message) {
 		super(message);
 	}
+	public EmployeeException(Integer id) {
+	    super("Could not find employee " + id);
+	  }
+	
 	public EmployeeException() {
 		super();
 	}
