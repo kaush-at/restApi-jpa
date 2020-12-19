@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.kaush.springboot.entities.Employee;
+import com.kaush.springboot.exception.EmployeeException;
 import com.kaush.springboot.repos.EmployeeRepo;
 
 
@@ -45,13 +46,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public void updateEmployee(Employee emp) {
-		Employee findById = employeeRepo.findById(emp.getEmployeeId()).get();
-		if(findById != null) {
-			employeeRepo.save(emp);			
-		}else {
-			
-		}
+	public Employee updateEmployee(Employee emp) {
+		Employee savedEmp = employeeRepo.save(emp);
+		return savedEmp;
 	}
 	
 	

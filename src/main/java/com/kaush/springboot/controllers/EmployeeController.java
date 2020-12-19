@@ -28,17 +28,23 @@ public class EmployeeController {
     @GetMapping(value = "/employees", consumes = "application/json")
     public List<Employee> getAllEmployees() throws EmployeeException {
         List<Employee> employees = employeeService.findAll();
-        if(employees != null) {
+        if(!employees.isEmpty()) {
         	return employees;
         }
         else {
-        	throw new EmployeeException("User list is Empty.");
+        	throw new EmployeeException("Employee list is Empty.");
         }
+    }
+    
+    // get Employee by Id
+    @GetMapping("/employees/{id}")
+    public Employee getEmployeeById(@PathVariable Integer id) {
+    	return employeeService.findById(id);
     }
     
     // add new employee
     @PostMapping(value = "/save",consumes = "application/json")
-    public Employee saveEmployee(@Valid @RequestBody Employee emp) {
+    public Employee saveEmployee(@RequestBody @Valid Employee emp) {
     	return employeeService.saveEmployee(emp);
     }
     
@@ -56,17 +62,27 @@ public class EmployeeController {
     
     // update employee
     @PutMapping(path="/update/{id}", consumes="application/json")
-    public void updateEmployee(@RequestBody Employee updateEmployee, @PathVariable Integer id) throws EmployeeException {
-    	Employee employee = employeeService.findById(id);
-    	if(employee != null) {
-    		employee.setEmployeeName(updateEmployee.getEmployeeName());
-    		employee.setEmployeeAge(updateEmployee.getEmployeeAge());
-    		employee.setDepartment(updateEmployee.getDepartment());
-    		employeeService.saveEmployee(employee);
-    	}
-    	else {
-    		throw new EmployeeException("User not found.");
-    	}
+    public Employee updateEmployee(@RequestBody Employee emp, @PathVariable Integer id) throws EmployeeException {
+    	Employee employeeFoundById = employeeService.findById(emp.getEmployeeId());
     	
+		if(employeeFoundById != null) {
+			if(emp.getEmployeeName() != null) {
+				employeeFoundById.setEmployeeName(emp.getEmployeeName());
+			}
+			if(emp.getEmployeeAge() != null) {
+				employeeFoundById.setEmployeeAge(emp.getEmployeeAge());
+			}
+			if(emp.getDepartment() != null) {
+				employeeFoundById.setDepartment(emp.getDepartment());
+			}
+			if(emp.getEmail() != null) {
+				employeeFoundById.setEmail(emp.getEmail());
+			}
+			
+			return employeeService.updateEmployee(emp);			
+		}else {
+			throw new EmployeeException("Employee not found for given Id");
+		}
     }
+    
 }
