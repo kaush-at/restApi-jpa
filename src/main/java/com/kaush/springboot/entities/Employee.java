@@ -1,5 +1,6 @@
 package com.kaush.springboot.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -16,13 +17,16 @@ public class Employee {
 	
 	@Id
 	@GeneratedValue
+	@Column(name="emp_id")
 	private Integer employeeId;
 	
 	@Size(min = 3, max = 20, message = "Employee name should be min 3 and max 20 charater" )
+	@Column(name="emp_name")
 	private String employeeName;
 	 
 	@NotNull
 	@Min(value = 18, message = "Age should greater than 18 to legally work in US")
+	@Column(name="emp_age")
 	private Integer employeeAge;
 	
 	@NotEmpty(message="Please add the department details")
